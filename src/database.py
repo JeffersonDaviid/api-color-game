@@ -33,7 +33,7 @@ class BaseModel(Model):
 
 # Modelo de Terapeuta
 class Therapist(BaseModel):
-    _cedulaT = CharField(primary_key=True)
+    cedulaT = CharField(primary_key=True)
     name = CharField()
     lastname = CharField()
     email = CharField()
@@ -43,7 +43,7 @@ class Therapist(BaseModel):
 
 # Modelo de Paciente
 class Patient(BaseModel):
-    _cedulaP = CharField(primary_key=True)
+    cedulaP = CharField(primary_key=True)
     name = CharField()
     lastname = CharField()
     phone = CharField()
@@ -51,7 +51,7 @@ class Patient(BaseModel):
 
 # Modelo de Sesión
 class Session(BaseModel):
-    _idSesion = IntegerField(primary_key=True)  # Definir como clave primaria
+    idSesion = IntegerField(primary_key=True)  # Definir como clave primaria
     patient = ForeignKeyField(
         Patient, backref="sessions", on_delete="CASCADE"
     )  # Relación de clave foránea con Paciente
@@ -67,7 +67,7 @@ class Session(BaseModel):
 
 # Modelo de Transferencia
 class Transfer(BaseModel):
-    _idTransfer = IntegerField(primary_key=True)  # Definir como clave primaria
+    idTransfer = IntegerField(primary_key=True)  # Definir como clave primaria
     patient = ForeignKeyField(
         Patient, backref="transfers", on_delete="CASCADE"
     )  # Relación de clave foránea con Paciente
