@@ -1,0 +1,40 @@
+services:
+  database-ma:
+    container_name: database-ma
+    image: postgres:16.4-alpine3.20
+    restart: always
+    # ports: # - "5433:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
+      - POSTGRES_DB=memoria_artistica
+    volumes:
+      - database-ma-data-dev:/var/lib/postgresql/data # Volumen para persistir los datos
+    networks:
+      - my-network
+
+  backend-ma:
+    container_name: backend-ma
+    restart: unless-stopped
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ./src:/app/src
+      - venv-dependencies:/app/.venv
+    networks:
+      - my-network
+    command: [ "/app/.venv/bin/uvicorn", "src.main:app", "--reload", "--host", "0.0.0.0", "--port", "${PORT}" ]
+
+volumes:
+  database-ma-data-dev:
+  venv-dependencies:
+
+
+networks:
+  my-network:
+    driver: bridge
