@@ -25,9 +25,22 @@ def post_therapists_ctrl(data: AuthModel):
         if not verified(data.password, therapist["password"]):
             return send_success_response(401, "Contraseña incorrecta")
 
-        token = generate_token(therapist, expires_in=timedelta(minutes=1))
+        token = generate_token(therapist, expires_in=timedelta(minutes=960))
 
-        return send_success_response(201, "Usuario login", {"token": token})
+        return send_success_response(
+            200,
+            "Usuario login",
+            {
+                "token": token,
+                "therapist": {
+                    "cedulaT": therapist.get("cedulaT"),
+                    "name": therapist.get("name"),
+                    "lastname": therapist.get("lastname"),
+                    "email": therapist.get("email"),
+                    "phone": therapist.get("phone"),
+                },
+            },
+        )
     except Exception as error:
         return get_details_error(error)
 
@@ -37,9 +50,7 @@ def post_therapists_ctrl(data: TherapistModel):
     try:
         therapist = create_therapist_serv(data)
         print(f"Usuario creado: {therapist.name}")
-        return send_success_response(
-            201, "Usuario creado", therapist["cedulaT", "name", "lastName"]
-        )
+        return send_success_response(201, "Usuario creado")
     except Exception as error:
         return get_details_error(error)
 

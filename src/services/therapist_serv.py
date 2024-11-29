@@ -34,6 +34,7 @@ def get_therapist_serv(cedula: str):
 
 def create_therapist_serv(data: TherapistModel):
     try:
+        print(data)
         passwordHashed = encrypt(data.password)
 
         user = Therapist.create(
