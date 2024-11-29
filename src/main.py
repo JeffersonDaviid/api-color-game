@@ -1,4 +1,5 @@
 from fastapi import FastAPI, HTTPException
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 
 from src.routes.auth import auth_router
@@ -6,6 +7,21 @@ from src.routes.therapist import therapist_router
 from src.utils.handle_respose import send_error_response
 
 app = FastAPI()
+
+
+# Configuración de CORS
+origins = [
+    "http://localhost:5173",  # Para permitir solicitudes desde localhost
+    "https://mi-app-frontend.com",  # Dominio de producción permitido
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,  # Orígenes permitidos
+    allow_credentials=True,  # Permitir cookies y credenciales
+    allow_methods=["*"],  # Métodos permitidos (GET, POST, etc.)
+    allow_headers=["*"],  # Encabezados permitidos
+)
 
 
 @app.get("/", response_class=HTMLResponse)
