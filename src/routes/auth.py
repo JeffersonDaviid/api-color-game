@@ -15,7 +15,7 @@ auth_router = APIRouter()
 
 
 @auth_router.post("/login")
-def post_therapists_ctrl(data: AuthModel):
+def login_therapists_ctrl(data: AuthModel):
     try:
         therapist = get_auth_therapist_serv(data.cedulaT)
 
@@ -46,7 +46,7 @@ def post_therapists_ctrl(data: AuthModel):
 
 
 @auth_router.post("/register")
-def post_therapists_ctrl(data: TherapistModel):
+def create_therapists_ctrl(data: TherapistModel):
     try:
         therapist = create_therapist_serv(data)
         print(f"Usuario creado: {therapist.name}")
@@ -56,5 +56,5 @@ def post_therapists_ctrl(data: TherapistModel):
 
 
 @auth_router.get("/logout")
-def get_therapists_ctrl():
+def logout_therapists_ctrl():
     return send_success_response(200, "Usuario deslogueado")
