@@ -14,13 +14,14 @@ patient_router = APIRouter()
 @patient_router.post("/register")
 def post_patients_ctrl(data: PatientModel):
     try:
+        print(f"Datos recibidos en el backend: {data.dict()}")
         therapist = get_therapist_serv(cedula=data.cedulaT)
         if not therapist:
-            return send_success_response(404, "El usuario no existe")
+            return send_success_response(404, "El terapeuta no existe")
         
         patient = create_patient_serv(data)
         print(f"Paciente creado: {patient.name}")
-        return send_success_response(201, "Paciente creado", patient)
+        return send_success_response(201, "Paciente creado")
     except Exception as error:
         return get_details_error(error)
     

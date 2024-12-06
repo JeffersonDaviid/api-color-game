@@ -5,12 +5,17 @@ from src.utils.handle_respose import send_success_response
 
 def create_patient_serv(data: PatientModel):
     try:
+        # Valida si ya existe un paciente con la misma cédula
+        existing_patient = Patient.get_or_none(Patient.cedulaP == data.cedulaP)
+        if existing_patient:
+            raise ValueError("El paciente ya existe con la misma cédula")
+        
         patient = Patient.create(
             cedulaP=data.cedulaP,
-            cedulaT=data.cedulaT,
             name=data.name,
             lastname=data.lastname,
             phone=data.phone,
+            cedulaT=data.cedulaT,
         )
         return patient
     except Exception as error:
@@ -18,15 +23,15 @@ def create_patient_serv(data: PatientModel):
 
 def get_patient_serv(cedula: str):
     try:
-        patient = Patient.select(
+        patients = Patient.select(
             Patient.cedulaP,
-            Patient.cedulaT,
             Patient.name,
             Patient.lastname,
             Patient.phone,
+            Patient.cedulaT,
         ).where(Patient.cedulaT == cedula)
 
-        return patient.dicts().first()
+        return list(patients.dicts())
     except Exception as error:
         raise error 
 
@@ -34,10 +39,10 @@ def get_patients_serv():
     try:
         patients = Patient.select(
             Patient.cedulaP,
-            Patient.cedulaT,
             Patient.name,
             Patient.lastname,
             Patient.phone,
+            Patient.cedulaT,
         )
         return list(patients.dicts())
     except Exception as error:
