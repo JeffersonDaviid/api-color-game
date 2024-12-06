@@ -44,10 +44,10 @@ class Therapist(BaseModel):
 # Modelo de Paciente
 class Patient(BaseModel):
     cedulaP = CharField(primary_key=True)
-    cedulaT = ForeignKeyField(Therapist, backref="patients", on_delete="CASCADE")
     name = CharField()
     lastname = CharField()
     phone = CharField()
+    cedulaT = ForeignKeyField(Therapist, backref="patients", on_delete="CASCADE")
 
 
 # Modelo de Sesión
