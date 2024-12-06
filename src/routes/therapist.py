@@ -22,7 +22,7 @@ def get_therapists_ctrl():
 
 
 @therapist_router.get("/{cedula}", dependencies=[Depends(session_validator)])
-def get_therapists_ctrl(cedula: str):
+def get_therapist_ctrl(cedula: str):
     try:
         therapist = get_therapist_serv(cedula=cedula)
 
