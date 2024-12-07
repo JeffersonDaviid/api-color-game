@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
 
-from src.services.patient_serv import create_patient_serv, get_patient_serv, get_patients_serv
+from src.services.patient_serv import create_patient_serv, get_patients_therapist_serv, get_patients_serv, get_patient_serv
 from src.middlewares.verify_session import session_validator
 from src.services.therapist_serv import get_therapist_serv
 from src.utils.error_handle import get_details_error
@@ -25,6 +25,18 @@ def post_patients_ctrl(data: PatientModel):
     except Exception as error:
         return get_details_error(error)
     
+@patient_router.get("/{cedulaT}")
+def get_patients_therapist_ctrl(cedulaT: str):
+    try:
+        patient = get_patients_therapist_serv(cedula=cedulaT)
+
+        if not patient:
+            return send_success_response(200, "No existen pacientes para este terapeuta")
+
+        return send_success_response(200, "Pacientes encontrados para este terapeuta", patient)
+    except Exception as error:
+        return get_details_error(error)
+    
 @patient_router.get("/all")
 def get_patients_ctrl():
     try:
@@ -33,19 +45,7 @@ def get_patients_ctrl():
         if not patients:
             return send_success_response(200, "No hay pacientes registrados")
 
-        return send_success_response(200, "Pacientes registrados", patients)
+        return send_success_response(200, "Todos los pacientes registrados", patients)
     except Exception as error:
         return get_details_error(error)
-
-
-@patient_router.get("/{cedula}")
-def get_patients_ctrl(cedula: str):
-    try:
-        patient = get_patient_serv(cedula=cedula)
-
-        if not patient:
-            return send_success_response(200, "El paciente no existe")
-
-        return send_success_response(200, "Paciente encontrado", patient)
-    except Exception as error:
-        return get_details_error(error)
+    
