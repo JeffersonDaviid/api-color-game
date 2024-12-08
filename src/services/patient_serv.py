@@ -1,4 +1,4 @@
-from src.database import Patient, Therapist
+from src.database import Patient
 from src.models.patient_model import PatientModel
 from src.utils.error_handle import get_details_error
 from src.utils.handle_respose import send_success_response
@@ -21,7 +21,7 @@ def create_patient_serv(data: PatientModel):
     except Exception as error:
         raise error;
 
-def get_patient_serv(cedula: str):
+def get_patients_therapist_serv(cedula: str):
     try:
         patients = Patient.select(
             Patient.cedulaP,
@@ -34,6 +34,20 @@ def get_patient_serv(cedula: str):
         return list(patients.dicts())
     except Exception as error:
         raise error 
+
+def get_patient_serv(cedula: str):
+    try:
+        patient = Patient.select(
+            Patient.cedulaP,
+            Patient.name,
+            Patient.lastname,
+            Patient.phone,
+            Patient.cedulaT,
+        ).where(Patient.cedulaP == cedula)
+
+        return patient.dicts().first()
+    except Exception as error:
+        raise error
 
 def get_patients_serv():
     try:

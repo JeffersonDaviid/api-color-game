@@ -61,8 +61,7 @@ class Session(BaseModel):
     )  # Relación de clave foránea con Terapeuta
     num_corrects = IntegerField()
     num_incorrects = IntegerField()
-    time_fig1 = FloatField()
-    time_fig2 = FloatField()
+    time_total = FloatField()
     session_at = DateTimeField(default=datetime.now)
 
 
