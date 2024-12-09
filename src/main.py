@@ -15,7 +15,7 @@ app = FastAPI()
 # Configuración de CORS
 origins = [
     "http://localhost:5173",  # Para permitir solicitudes desde localhost
-    "https://jeffersondaviid.github.io/",  # Dominio de producción permitido
+    "https://jeffersondaviid.github.io",  # Dominio de producción permitido
 ]
 
 app.add_middleware(
