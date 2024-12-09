@@ -1,0 +1,25 @@
+services:
+  backend-ma:
+    container_name: backend-ma
+    restart: unless-stopped
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - ${PORT}:${PORT}
+    volumes:
+      - ./src:/app/src
+      - venv-dependencies:/app/.venv
+    networks:
+      - my-network
+    command: [ "/app/.venv/bin/uvicorn", "src.main:app", "--reload", "--host", "0.0.0.0", "--port", "${PORT}" ]
+
+volumes:
+  venv-dependencies:
+
+
+networks:
+  my-network:
+    driver: bridge
