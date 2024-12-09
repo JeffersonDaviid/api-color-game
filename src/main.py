@@ -6,6 +6,7 @@ from src.routes.auth import auth_router
 from src.routes.therapist import therapist_router
 from src.routes.patient import patient_router
 from src.routes.session import session_router
+from src.routes.transfer import transfer_router
 from src.utils.handle_respose import send_error_response
 
 app = FastAPI()
@@ -35,6 +36,7 @@ app.include_router(therapist_router, prefix="/api/v1/therapist")
 app.include_router(auth_router, prefix="/api/v1/auth")
 app.include_router(patient_router, prefix="/api/v1/patient")
 app.include_router(session_router, prefix="/api/v1/session")
+app.include_router(transfer_router, prefix="/api/v1/transfer")
 
 
 @app.exception_handler(HTTPException)
