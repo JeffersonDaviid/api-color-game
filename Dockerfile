@@ -15,6 +15,8 @@ ENV PATH="/app/.venv/bin:$PATH" \
     PYTHONPATH="/app/src:$PYTHONPATH"
 
 # Definir el puerto como variable de entorno para alinearse con el archivo docker-compose
-ARG PORT=8000
-EXPOSE $PORT
+EXPOSE 8000
+
+# ejercutar
+CMD ["uvicorn", "src.main:app", "--reload", "--host", "0.0.0.0", "--port", "8000"]
 
