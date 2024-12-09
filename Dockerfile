@@ -4,19 +4,21 @@ FROM python:3.12-slim
 # Establecer el directorio de trabajo
 WORKDIR /app
 
-# Copiar y preparar las dependencias
-COPY requirements.txt ./
-RUN python -m venv .venv \
-    && .venv/bin/pip install --no-cache-dir --upgrade pip \
-    && .venv/bin/pip install --no-cache-dir -r requirements.txt
+# Copiar solo el archivo de dependencias primero para aprovechar el cache
+COPY requirements.txt .
 
-# Establecer las variables de entorno para el entorno virtual
-ENV PATH="/app/.venv/bin:$PATH" \
-    PYTHONPATH="/app/src:$PYTHONPATH"
+# Instalar las dependencias en un solo paso
+RUN pip install --no-cache-dir --upgrade pip \
+    && pip install --no-cache-dir -r requirements.txt
 
-# Definir el puerto como variable de entorno para alinearse con el archivo docker-compose
+# Copiar el código fuente al contenedor
+COPY . /app
+
+# Establecer las variables de entorno para el entorno virtual (esto ya no es necesario si no usamos venv)
+ENV PYTHONPATH="/app/src:$PYTHONPATH"
+
+# Exponer el puerto para que el contenedor sea accesible en producción
 EXPOSE 8000
 
-# ejercutar
+# Ejecutar Uvicorn para poner en producción la aplicación FastAPI
 CMD ["uvicorn", "src.main:app", "--host", "0.0.0.0", "--port", "8000"]
-

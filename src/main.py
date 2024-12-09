@@ -3,9 +3,9 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import HTMLResponse
 
 from src.routes.auth import auth_router
-from src.routes.therapist import therapist_router
 from src.routes.patient import patient_router
 from src.routes.session import session_router
+from src.routes.therapist import therapist_router
 from src.routes.transfer import transfer_router
 from src.utils.handle_respose import send_error_response
 
@@ -15,7 +15,7 @@ app = FastAPI()
 # Configuración de CORS
 origins = [
     "http://localhost:5173",  # Para permitir solicitudes desde localhost
-    "https://mi-app-frontend.com",  # Dominio de producción permitido
+    "https://jeffersondaviid.github.io/",  # Dominio de producción permitido
 ]
 
 app.add_middleware(
