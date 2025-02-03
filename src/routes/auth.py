@@ -29,7 +29,7 @@ def login_therapists_ctrl(data: AuthModel):
 
         return send_success_response(
             200,
-            "Usuario login",
+            "Usuario logueado",
             {
                 "token": token,
                 "therapist": {
