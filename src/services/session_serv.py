@@ -1,4 +1,4 @@
-from src.database import Session
+from src.database import Session, Therapist
 from src.models.session_model import SessionModel
 from src.utils.error_handle import get_details_error
 from src.utils.handle_respose import send_success_response
@@ -29,19 +29,35 @@ def get_sessions_patient_serv(cedula: str):
             Session.time_total,
             Session.session_at,
         ).where(Session.patient == cedula)
+        
+        # Obtener los terapeutas
+        therapists = Therapist.select(
+            Therapist.cedulaT,
+            Therapist.name,
+            Therapist.lastname,
+        )
+
+        # Crear un diccionario de terapeutas por cédula para un acceso rápido
+        therapists_dict = {
+            therapist.cedulaT: f"{therapist.name} {therapist.lastname}"
+            for therapist in therapists
+        }
+
+        # Serializar las sesiones
         serialized_sessions = [
             {
                 "idSesion": session.idSesion,
-                "patient": session.patient.cedulaP, 
-                "therapist": session.therapist.cedulaT, 
+                "patient": session.patient.cedulaP,
+                "therapist": therapists_dict.get(
+                    session.therapist, "Desconocido"
+                ),  # Devuelve "Desconocido" si no hay match
                 "num_corrects": session.num_corrects,
                 "num_incorrects": session.num_incorrects,
                 "time_total": session.time_total,
-                "session_at": session.session_at.isoformat(), 
+                "session_at": session.session_at.isoformat(),
             }
             for session in sessions
         ]
-
         return serialized_sessions
     except Exception as error:
         raise error
