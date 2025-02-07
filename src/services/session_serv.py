@@ -20,6 +20,7 @@ def create_session_serv(data: SessionModel):
 
 def get_sessions_patient_serv(cedula: str):
     try:
+        # Obtener las sesiones del paciente
         sessions = Session.select(
             Session.idSesion,
             Session.patient,
@@ -30,30 +31,12 @@ def get_sessions_patient_serv(cedula: str):
             Session.session_at,
         ).where(Session.patient == cedula)
         
-        # Obtener los terapeutas
-        therapists = Therapist.select(
-            Therapist.cedulaT,
-            Therapist.name,
-            Therapist.lastname,
-        )
-
-        # Crear un diccionario de terapeutas por cédula para un acceso rápido
-        therapists_dict = {
-            therapist.cedulaT: f"{therapist.name} {therapist.lastname}"
-            for therapist in therapists
-        }
-        # mostar cada therapist con print
-        for therapist in therapists:
-            print(therapist)
-
         # Serializar las sesiones
         serialized_sessions = [
             {
                 "idSesion": session.idSesion,
                 "patient": session.patient.cedulaP,
-                "therapist": therapists_dict.get(
-                    session.therapist, "Desconocido"
-                ),  # Devuelve "Desconocido" si no hay match
+                "therapist": f"{session.therapist.name} {session.therapist.lastname}",  # Obtener nombre completo del terapeuta
                 "num_corrects": session.num_corrects,
                 "num_incorrects": session.num_incorrects,
                 "time_total": session.time_total,
@@ -61,6 +44,7 @@ def get_sessions_patient_serv(cedula: str):
             }
             for session in sessions
         ]
+
         return serialized_sessions
     except Exception as error:
         raise error
@@ -86,7 +70,7 @@ def get_session_patient_serv(idSesion: int):
                 "num_incorrects": session.num_incorrects,
                 "time_total": session.time_total,
                 "session_at": session.session_at.isoformat(),
-            }
+
             return serialized_session
         else:
             return None
@@ -97,6 +81,7 @@ def get_session_patient_serv(idSesion: int):
 
 def get_sessions_serv():
     try:
+        # Obtener las sesiones del paciente
         sessions = Session.select(
             Session.idSesion,
             Session.patient,
@@ -105,28 +90,14 @@ def get_sessions_serv():
             Session.num_incorrects,
             Session.time_total,
             Session.session_at,
-        )
+        ).where(Session.patient == cedula)
         
-        therapists = Therapist.select(
-            Therapist.cedulaT,
-            Therapist.name,
-            Therapist.lastname,
-        )
-
-        # Crear un diccionario de terapeutas por cédula para un acceso rápido
-        therapists_dict = {
-            therapist.cedulaT: f"{therapist.name} {therapist.lastname}"
-            for therapist in therapists
-        }
-
         # Serializar las sesiones
         serialized_sessions = [
             {
                 "idSesion": session.idSesion,
                 "patient": session.patient.cedulaP,
-                "therapist": therapists_dict.get(
-                    session.therapist, "Desconocido"
-                ),  # Devuelve "Desconocido" si no hay match
+                "therapist": f"{session.therapist.name} {session.therapist.lastname}",  # Obtener nombre completo del terapeuta
                 "num_corrects": session.num_corrects,
                 "num_incorrects": session.num_incorrects,
                 "time_total": session.time_total,
