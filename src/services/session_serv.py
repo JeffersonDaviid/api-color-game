@@ -70,7 +70,7 @@ def get_session_patient_serv(idSesion: int):
                 "num_incorrects": session.num_incorrects,
                 "time_total": session.time_total,
                 "session_at": session.session_at.isoformat(),
-
+            }
             return serialized_session
         else:
             return None
