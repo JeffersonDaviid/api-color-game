@@ -42,6 +42,9 @@ def get_sessions_patient_serv(cedula: str):
             therapist.cedulaT: f"{therapist.name} {therapist.lastname}"
             for therapist in therapists
         }
+        # mostar cada therapist con print
+        for therapist in therapists:
+            print(therapist)
 
         # Serializar las sesiones
         serialized_sessions = [
