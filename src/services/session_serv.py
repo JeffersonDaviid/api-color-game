@@ -87,15 +87,31 @@ def get_sessions_serv():
             Session.time_total,
             Session.session_at,
         )
+        
+        therapists = Therapist.select(
+            Therapist.cedulaT,
+            Therapist.name,
+            Therapist.lastname,
+        )
+
+        # Crear un diccionario de terapeutas por cédula para un acceso rápido
+        therapists_dict = {
+            therapist.cedulaT: f"{therapist.name} {therapist.lastname}"
+            for therapist in therapists
+        }
+
+        # Serializar las sesiones
         serialized_sessions = [
             {
                 "idSesion": session.idSesion,
-                "patient": session.patient.cedulaP, 
-                "therapist": session.therapist.cedulaT, 
+                "patient": session.patient.cedulaP,
+                "therapist": therapists_dict.get(
+                    session.therapist, "Desconocido"
+                ),  # Devuelve "Desconocido" si no hay match
                 "num_corrects": session.num_corrects,
                 "num_incorrects": session.num_incorrects,
                 "time_total": session.time_total,
-                "session_at": session.session_at.isoformat(), 
+                "session_at": session.session_at.isoformat(),
             }
             for session in sessions
         ]
